@@ -2,6 +2,7 @@
 Module 3 Challenge
 
 This challenge has 2 parts.
+  
   Part 1: Dissecting financial records for a company.
   Printing the results for:
     Total Months
