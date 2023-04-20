@@ -1,0 +1,52 @@
+import pandas as pd
+polls = pd.read_csv('./election_data.csv')
+polls
+
+#create txt file
+with open('election.txt', 'w') as f: 
+
+    f.write('Election Results\n')
+    print('Election Results')
+
+    f.write('---------------------------\n')
+    print('---------------------------')
+
+
+    #Toal number of votes cast
+    votes_cast = len(polls['Ballot ID'])
+
+    f.write(f'Total Votes: {votes_cast}\n')
+    print('Total Votes: ', votes_cast)
+
+    f.write('---------------------------\n')
+    print('---------------------------')
+
+    #Candidates who received votes
+    candidates = polls.Candidate.unique()
+
+    # Aggregating results 
+    names = ['Charles Casper Stockham', 'Diana DeGette', 'Raymon Anthony Doane']
+
+    #Variables
+    winner_name = ''
+    winner_count = 0
+    winner_percent = 0
+
+    for name in names:
+        # Number of votes each candidate won
+        name_count = polls['Candidate'].str.count(name).sum()
+    
+        # Percentage of votes each candidate won
+        name_percentage = (name_count / len(polls['Candidate'])*100)
+        f.write(f'{name}:  {name_percentage:.3f}%  ({name_count})\n')
+        print(f'{name}:  {name_percentage:.3f}%  ({name_count})')
+   
+        #determine the winner
+        if name_count > winner_count:
+            winner_name = name
+            winner_count = name_count
+
+    f.write('---------------------------')    
+    print('---------------------------')
+    f.write(f'\n Winner: {winner_name}\n')
+    print(f'\n Winner: {winner_name}')
