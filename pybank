@@ -1,0 +1,48 @@
+# Import pandas and csv file
+import pandas as pd
+budget = pd.read_csv('./budget_data.csv')
+
+#create txt file
+with open('bank.txt','w') as f:
+
+    f.write('Financial Analysis \n')
+    print('Financial Analysis')
+
+    f.write('----------------\n')
+    print('----------------')
+
+    # Count the total number of months included in the data set
+    months = len(budget['Date'])
+
+    f.write('Total Months: ' + str(months)+ '\n')
+    print('Total Months: ', months)
+
+    # Net total of Profit/Losses over the entire period
+    budget['Profit/Losses'] = budget['Profit/Losses'].astype(int)
+
+    total = budget['Profit/Losses'].sum()
+    f.write('Total: $' + str(total) + '\n')
+    print('Total: $', total)
+
+    # Find the difference between months and put in a new column
+    budget['Change'] = budget['Profit/Losses'] - budget['Profit/Losses'].shift(1, fill_value=0)
+
+    # Exlude row 1 because there wasn't a month before it to compare
+    budget = budget.iloc[1:]
+
+    # Average change
+    average = budget['Change'].mean()
+    f.write('Average Change: $'+ "{:.2f}".format(average)+ '\n')
+    print('Average Change:', '$'+ "{:.2f}".format(average))
+
+    # Greatest Increase in Profits:
+    col = 'Change'
+    max = budget.loc[budget[col].idxmax()]
+    f.write('Greatest Increase in Profits:'+ max['Date'] + '$'+str(max[col])+ '\n')
+    print('Greatest Increase in Profits:', max['Date'], '$', max[col])
+
+    # Greatest Decrease in Profits:
+    col = 'Change'
+    min = budget.loc[budget[col].idxmin()]
+    f.write('Greatest Decrease in Profits:'+ min['Date']+ '$'+ str( min[col])+ '\n')
+    print('Greatest Decrease in Profits:', min['Date'], '$', min[col])
